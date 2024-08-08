@@ -77,11 +77,11 @@ services:
     depends_on:
       - pgdb
 
-  client:
-    image: welcome-to-docker:latest
-    restart: always
-    ports:
-      - '3000:3000'
+  # client:
+  #   image: welcome-to-docker:latest
+  #   restart: always
+  #   ports:
+  #     - '3000:3000'
 
 
 volumes:
