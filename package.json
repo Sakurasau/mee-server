@@ -1,10 +1,10 @@
 {
   "name": "mee-server",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "Mee messenger server",
+  "author": "Savenko Nikita",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "GPL-3.0",
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
