@@ -28,17 +28,19 @@ jobs:
             sudo docker compose up -d --build
           EOF
 
-      - name: Create Deployment
-        id: deployment
-        run: |
-          echo "Deploying to production environment"
-          echo "::set-output name=state::success"
-
-      - name: Notify Deployment Status
-        run: |
-          if [[ "${{ steps.deployment.outputs.state }}" == "success" ]]; then
-            echo "Deployment successful"
-          else
-            echo "Deployment failed"
-            exit 1
-          fi
+      - name: Notify deployment status
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const deployment = await github.repos.createDeployment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: context.sha,
+              required_contexts: []
+            });
+            await github.repos.createDeploymentStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              deployment_id: deployment.data.id,
+              state: 'success'
+            });
