@@ -27,20 +27,3 @@ jobs:
             git pull origin main
             sudo docker compose up -d --build
           EOF
-
-      - name: Notify deployment status
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const deployment = await github.repos.createDeployment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: context.sha,
-              required_contexts: []
-            });
-            await github.repos.createDeploymentStatus({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              deployment_id: deployment.data.id,
-              state: 'success'
-            });
