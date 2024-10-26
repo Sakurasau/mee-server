@@ -1,0 +1,29 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.OMI_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.OMI_SSH_SERVER_IP }} >> ~/.ssh/known_hosts
+
+      - name: Deploy to Server
+        run: |
+          ssh ${{ secrets.OMI_SSH_USER }}@${{ secrets.OMI_SSH_SERVER_IP }} << 'EOF'
+            cd /home/opc/projects/mee-server/
+            git pull origin main
+            docker compose up -d --build
+          EOF
