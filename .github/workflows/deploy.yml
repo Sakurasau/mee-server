@@ -25,5 +25,5 @@ jobs:
           ssh ${{ secrets.OMI_SSH_USER }}@${{ secrets.OMI_SSH_SERVER_IP }} << 'EOF'
             cd /home/opc/projects/mee-server/
             git pull origin main
-            docker compose up -d --build
+            sudo docker compose up -d --build
           EOF
