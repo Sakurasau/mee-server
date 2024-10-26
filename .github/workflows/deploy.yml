@@ -27,3 +27,18 @@ jobs:
             git pull origin main
             sudo docker compose up -d --build
           EOF
+
+      - name: Create Deployment
+        id: deployment
+        run: |
+          echo "Deploying to production environment"
+          echo "::set-output name=state::success"
+
+      - name: Notify Deployment Status
+        run: |
+          if [[ "${{ steps.deployment.outputs.state }}" == "success" ]]; then
+            echo "Deployment successful"
+          else
+            echo "Deployment failed"
+            exit 1
+          fi
