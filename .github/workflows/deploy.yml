@@ -25,7 +25,7 @@ jobs:
         with:
           status: in_progress
           run_id: ${{ github.run_id }}
-          deployment_status_url: ${{ github.event.repository.deployments_url }}
+          deployment_status_url: ${{ github.event.ref.deployment_status_url }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -42,6 +42,6 @@ jobs:
         with:
           status: ${{ job.status }}
           run_id: ${{ github.run_id }}
-          deployment_status_url: ${{ github.event.repository.deployments_url }}
+          deployment_status_url: ${{ github.event.ref.deployment_status_url }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
