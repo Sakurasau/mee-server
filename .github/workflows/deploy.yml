@@ -31,7 +31,7 @@ jobs:
       - name: Deploy to Server
         run: |
           ssh ${{ secrets.OMI_SSH_USER }}@${{ secrets.OMI_SSH_SERVER_IP }} << 'EOF'
-            cd /home/opc/projects/mee-server/
+            cd /home/opc/projects/mee/mee-server/
             git pull origin main
             sudo docker compose up -d --build
           EOF
