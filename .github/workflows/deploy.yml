@@ -18,13 +18,6 @@ jobs:
         uses: octokit/request-action@v2.x
         with:
           route: POST /repos/:owner/:repo/deployments
-          owner: Sakurasau
-          repo: mee-server
-          ref: main
-          environment: production
-          description: Deploying to production
-          auto_merge: false
-          headers: '{"Accept":"application/vnd.github.v3+json"}'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         
