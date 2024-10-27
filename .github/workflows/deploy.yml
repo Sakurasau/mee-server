@@ -18,6 +18,16 @@ jobs:
         uses: octokit/request-action@v2.x
         with:
           route: POST /repos/:owner/:repo/deployments
+          owner: Sakurasau
+          repo: mee-server
+          ref: main
+          environment: production
+          description: Deploying to production
+          auto_merge: false
+          required_contexts: []
+          headers: '{"Accept":"application/vnd.github.v3+json"}'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         
       - name: Extract Deployment Status URL
         run: echo "DEPLOYMENT_STATUS_URL=$(jq -r '.statuses_url' < "$GITHUB_EVENT_PATH")" >> $GITHUB_ENV
