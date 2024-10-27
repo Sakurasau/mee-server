@@ -24,7 +24,6 @@ jobs:
           environment: production
           description: Deploying to production
           auto_merge: false
-          required_contexts: []
           headers: '{"Accept":"application/vnd.github.v3+json"}'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
