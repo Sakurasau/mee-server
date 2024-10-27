@@ -23,7 +23,7 @@ services:
       - /etc/ssl/mee.social:/etc/ssl/mee.social
     depends_on:
       - backend
-      # - client
+      - client
     container_name: mee-proxy
     command: /bin/bash -c "envsubst < etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"
   
@@ -40,6 +40,17 @@ services:
     depends_on:
       - pgdb
     container_name: mee-backend
+  
+  client:
+    build:
+      context: ../mee/packages/mee-web
+    restart: always
+    ports:
+      - '3000:3000'
+    environment:
+       NODE_ENV: production
+    container_name: mee-client
+
 
 volumes:
   pgdata:

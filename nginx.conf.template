@@ -17,16 +17,16 @@ http {
         ssl_certificate         ${NGINX_SSL_CERTIFICATE_PATH};
         ssl_certificate_key     ${NGINX_SSL_CERTIFICATE_KEY_PATH};
 
+        location / {
+            proxy_pass http://client:${PORT_FRONTEND};
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+
         location /api/ {
             proxy_pass http://backend:${PORT_BACKEND}/;
         }
-
-        # location / {
-        #     proxy_pass http://client:${PORT_FRONTEND};
-        #     proxy_set_header Host $host;
-        #     proxy_set_header X-Real-IP $remote_addr;
-        #     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        #     proxy_set_header X-Forwarded-Proto $scheme;
-        # }
     }
 }
