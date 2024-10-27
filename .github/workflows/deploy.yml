@@ -1,4 +1,6 @@
-name: Deploy to Server
+name: Deployment
+
+concurrency: production
 
 on:
   push:
