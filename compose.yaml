@@ -43,7 +43,7 @@ services:
   
   client:
     build:
-      context: ../mee/packages/mee-web
+      context: ../mee
     restart: always
     ports:
       - '3000:3000'
