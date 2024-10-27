@@ -1,7 +1,5 @@
 name: Deployment
 
-concurrency: production
-
 on:
   push:
     branches:
@@ -14,6 +12,15 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+      
+      - name: Create Deployment
+        id: create_deployment
+        uses: octokit/request-action@v2.x
+        with:
+          route: POST /repos/:owner/:repo/deployments
+        
+      - name: Extract Deployment Status URL
+        run: echo "DEPLOYMENT_STATUS_URL=$(jq -r '.statuses_url' < "$GITHUB_EVENT_PATH")" >> $GITHUB_ENV
 
       - name: Set up SSH
         run: |
@@ -27,6 +34,7 @@ jobs:
         with:
           status: in_progress
           run_id: ${{ github.run_id }}
+          deployment_status_url: ${{ env.DEPLOYMENT_STATUS_URL }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -43,5 +51,6 @@ jobs:
         with:
           status: ${{ job.status }}
           run_id: ${{ github.run_id }}
+          deployment_status_url: ${{ env.DEPLOYMENT_STATUS_URL }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
