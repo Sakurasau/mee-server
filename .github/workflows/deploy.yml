@@ -20,6 +20,14 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.OMI_SSH_SERVER_IP }} >> ~/.ssh/known_hosts
 
+      - name: Set deployment status to [in_progress]
+        uses: rsotnychenko/deployment-status-update@0.2.1
+        with:
+          run_id: ${{ github.run_id }}
+          status: in_progress
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Deploy to Server
         run: |
           ssh ${{ secrets.OMI_SSH_USER }}@${{ secrets.OMI_SSH_SERVER_IP }} << 'EOF'
@@ -27,3 +35,11 @@ jobs:
             git pull origin main
             sudo docker compose up -d --build
           EOF
+      
+      - name: Set deployment status
+        uses: rsotnychenko/deployment-status-update@0.2.1
+        with:
+          status: ${{ job.status }}
+          run_id: ${{ github.run_id }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
