@@ -3,6 +3,7 @@
 /node_modules
 /build
 /pgdata
+/volumes
 
 # Logs
 logs

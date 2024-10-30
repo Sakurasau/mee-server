@@ -25,7 +25,7 @@ services:
       - backend
       - client
     container_name: mee-proxy
-    command: /bin/bash -c "envsubst < etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"
+    command: /bin/bash -c "envsubst < etc/nginx/nginx.template.conf > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"
   
   backend:
     build:
@@ -51,18 +51,16 @@ services:
        NODE_ENV: production
     container_name: mee-client
 
+  landing:
+    build:
+      context: ../mee-landing
+    restart: always
+    ports:
+      - '3001:3001'
+    environment:
+       NODE_ENV: production
+    container_name: mee-landing
+
 
 volumes:
   pgdata:
-
-  # client:
-  #   image: node:latest
-  #   restart: always
-  #   ports:
-  #     - '3000:3000'
-  #   working_dir: /app
-  #   volumes:
-  #     - ./client:/app
-  #   command: npm start
-  #   depends_on:
-  #     - pgdb
