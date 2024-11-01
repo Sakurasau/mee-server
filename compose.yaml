@@ -19,7 +19,7 @@ services:
       - ./.env
     volumes:
       # - ./nginx.conf:/etc/nginx/nginx.conf
-      - ./nginx.conf.template:/etc/nginx/nginx.conf.template
+      - ./nginx.template.conf:/etc/nginx/nginx.template.conf
       - /etc/ssl/mee.social:/etc/ssl/mee.social
     depends_on:
       - backend
