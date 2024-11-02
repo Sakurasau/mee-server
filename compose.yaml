@@ -3,7 +3,7 @@ services:
     image: postgres:latest
     restart: on-failure
     ports:
-      - '5432:5432'
+      - ${PORT_POSTGRES}:${PORT_POSTGRES}
     env_file:
       - ./.env
     volumes:
@@ -12,6 +12,7 @@ services:
   
   proxy:
     image: nginx:latest
+    restart: always
     ports:
       - '80:80'
       - '443:443'
@@ -32,11 +33,9 @@ services:
       context: .
     restart: always
     ports:
-      - '5000:5000'
-    environment:
-       NODE_ENV: production
+      - ${PORT_BACKEND}
     env_file:
-      - ./.env
+      - path: ./.env
     depends_on:
       - pgdb
     container_name: mee-backend
@@ -44,21 +43,26 @@ services:
   client:
     build:
       context: ../mee
+      args:
+        CLIENT_WEB_BASE_PATH: ${CLIENT_WEB_BASE_PATH}
+        PORT_FRONTEND: ${PORT_FRONTEND}
     restart: always
     ports:
-      - '3000:3000'
-    environment:
-       NODE_ENV: production
+      - ${PORT_FRONTEND}
+    env_file:
+      - path: ./.env
     container_name: mee-client
 
   landing:
     build:
       context: ../mee-landing
+      args:
+        PORT: ${PORT_LANDING}
     restart: always
     ports:
-      - '3001:3001'
-    environment:
-       NODE_ENV: production
+      - ${PORT_LANDING}
+    env_file:
+      - path: ./.env
     container_name: mee-landing
 
 
