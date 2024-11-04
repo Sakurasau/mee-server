@@ -1,3 +1,4 @@
+import { Range } from '@/decorators/range.decorator';
 import { MessageDto } from '@/dto/message.dto';
 import { AppService } from '@/services/app.service';
 import {
@@ -16,22 +17,20 @@ import {
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get('list')
-  getMessages(): string[] {
-    return this.appService.getMessages();
+  @Get()
+  getMessages(@Range() range: { skip: number; take?: number }) {
+    return this.appService.getMessages(range);
   }
 
-  @Get('get/:id')
-  getMessage(@Param('id', ParseIntPipe) id: number): string {
-    if (id < 0) throw new BadRequestException('Invalid id');
-
+  @Get(':id')
+  getMessage(@Param('id') id: string) {
+    // throw new BadRequestException('Invalid id');
     return this.appService.getMessage(id);
   }
 
   @UsePipes(new ValidationPipe())
-  @Post('add')
+  @Post('create')
   createMessage(@Body() dto: MessageDto) {
-    console.log(dto);
-    return dto;
+    return this.appService.createMessage(dto);
   }
 }

@@ -1,14 +1,20 @@
+import { DatabaseService } from '@/services/database.service';
+import { MessageDto } from '@/dto/message.dto';
 import { Injectable } from '@nestjs/common';
-
-const messages = ['Hello World!', 'Hello NestJS!'];
 
 @Injectable()
 export class AppService {
-  getMessages(): string[] {
-    return messages;
+  constructor(private readonly databaseService: DatabaseService) {}
+
+  getMessages(range: { skip: number; take?: number }) {
+    return this.databaseService.message.findMany(range);
   }
 
-  getMessage(id: number): string {
-    return messages[id];
+  getMessage(id: string) {
+    return this.databaseService.message.findFirst({ where: { id } });
+  }
+
+  createMessage(data: MessageDto) {
+    return this.databaseService.message.create({ data: data });
   }
 }
