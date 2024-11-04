@@ -44,7 +44,7 @@ services:
     build:
       context: ../mee
       args:
-        CLIENT_WEB_BASE_PATH: ${CLIENT_WEB_BASE_PATH}
+        CLIENT_WEB_BASE_PREFIX: ${CLIENT_WEB_BASE_PREFIX}
         PORT_FRONTEND: ${PORT_FRONTEND}
     restart: always
     ports:
