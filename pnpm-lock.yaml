@@ -29,9 +29,6 @@ importers:
       class-validator:
         specifier: ^0.14.1
         version: 0.14.1
-      dotenv:
-        specifier: ^16.4.5
-        version: 16.4.5
       prisma:
         specifier: ^5.21.1
         version: 5.21.1
