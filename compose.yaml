@@ -31,6 +31,10 @@ services:
   backend:
     build:
       context: .
+      args:
+        PORT_BACKEND: ${PORT_BACKEND}
+        SERVER_BASE_PREFIX: ${SERVER_BASE_PREFIX}
+        POSTGRES_CONNECTION_URL: ${POSTGRES_CONNECTION_URL}
     restart: always
     ports:
       - ${PORT_BACKEND}
