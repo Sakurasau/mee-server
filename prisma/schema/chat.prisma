@@ -1,0 +1,72 @@
+model Chat {
+  id         String   @id @default(cuid())
+  type       ChatType @default(DIRECT)
+  created_at DateTime @default(now())
+  chat_name  String?
+
+  messages     Message[]
+  participants ChatParticipant[]
+
+  @@map("chats")
+}
+
+model ChatParticipant {
+  chat_id   String
+  user_id   String
+  joined_at DateTime @default(now())
+
+  chat Chat @relation(fields: [chat_id], references: [id])
+  user User @relation(fields: [user_id], references: [id])
+
+  @@id([chat_id, user_id])
+  @@map("chat_participants")
+}
+
+model Message {
+  id           BigInt            @id @default(autoincrement())
+  chat_id      String
+  sender_id    String?
+  content      String?
+  created_at   DateTime          @default(now())
+  updated_at   DateTime          @updatedAt
+  message_type MessageType       @default(TEXT)
+  status       MessageStatusType @default(SENT)
+  is_deleted   Boolean           @default(false)
+  reply_id     BigInt?
+
+  // statuses MessageStatus[]
+  // attachments   Attachment[]
+
+  chat     Chat      @relation(fields: [chat_id], references: [id])
+  sender   User?     @relation(fields: [sender_id], references: [id])
+  reply_to Message?  @relation("MessageReplies", fields: [reply_id], references: [id])
+  replies  Message[] @relation("MessageReplies")
+
+  @@map("messages")
+}
+
+// model MessageStatus {
+//   message_id BigInt
+//   user_id    String
+//   type       MessageStatusType @default(SENT)
+//   created_at DateTime          @default(now())
+
+//   // message Message @relation("MessageStatus", fields: [message_id], references: [id])
+//   user    User?   @relation(fields: [user_id], references: [id])
+
+//   @@id([message_id, user_id, type])
+//   @@map("message_statuses")
+// }
+
+// model Attachment {
+//   attachment_id   Int               @id @default(autoincrement())
+//   message_id      BigInt
+//   file_path       String
+//   file_type       String
+//   uploaded_at     DateTime          @default(now())
+
+//   // Relations
+//   message         Message           @relation(fields: [message_id], references: [id])
+
+//   @@map("attachments")
+// }

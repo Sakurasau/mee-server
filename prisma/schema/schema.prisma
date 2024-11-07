@@ -1,0 +1,57 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["prismaSchemaFolder"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRES_CONNECTION_URL")
+}
+
+model User {
+  id         String   @id @default(cuid())
+  username   String   @unique
+  email      String   @unique
+  created_at DateTime @default(now())
+  // password_hash String
+  // last_login    DateTime?
+
+  profile       UserProfile?
+  settings      UserSettings?
+  chats         ChatParticipant[]
+  sent_messages Message[]
+  // groupChats   GroupChat[] //@relation("UserGroups")
+  // sessageStatus MessageStatus[]
+  // contactsOf    Contact[]       @relation("ContactUsers")
+  // contacts      Contact[]       @relation("UserContacts")
+  // links         Link[]
+
+  @@map("users")
+}
+
+model UserProfile {
+  user_id       String    @id
+  updated_at    DateTime  @default(now()) @updatedAt
+  bio           String?
+  photos_urls   String[]
+  date_of_birth DateTime?
+  // location      String?
+  // links         Link[]
+
+  user User @relation(fields: [user_id], references: [id])
+
+  @@map("user_profiles")
+}
+
+// model Contact {
+//   contact_id      Int      @id @default(autoincrement())
+//   user_id         Int
+//   contact_user_id Int
+//   added_at        DateTime @default(now())
+
+//   user        User @relation("UserContacts", fields: [user_id], references: [id])
+//   contactUser User @relation("ContactUsers", fields: [contact_user_id], references: [id])
+
+//   @@unique([user_id, contact_user_id])
+//   @@map("contacts")
+// }

@@ -1,0 +1,19 @@
+enum ChatType {
+  DIRECT // personal messages
+  GROUP
+  CHANNEL
+}
+
+enum MessageType {
+  TEXT
+  // IMAGE
+  // VIDEO
+  // AUDIO
+  // FILE
+}
+
+enum MessageStatusType {
+  SENT
+  RECEIVED
+  READ
+}

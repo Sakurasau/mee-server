@@ -1,0 +1,10 @@
+model UserSettings {
+  id      Int    @id @default(autoincrement())
+  user_id String @unique
+
+  theme String
+
+  user User @relation(fields: [user_id], references: [id])
+
+  @@map("user_settings")
+}
