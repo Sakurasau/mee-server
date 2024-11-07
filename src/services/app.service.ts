@@ -10,11 +10,11 @@ export class AppService {
     return this.databaseService.message.findMany(range);
   }
 
-  getMessage(id: string) {
+  getMessage(id: number) {
     return this.databaseService.message.findFirst({ where: { id } });
   }
 
-  createMessage(data: MessageDto) {
-    return this.databaseService.message.create({ data: data });
-  }
+  // createMessage(data: MessageDto) {
+  //   return this.databaseService.message.create({ data: data });
+  // }
 }

@@ -23,14 +23,14 @@ export class AppController {
   }
 
   @Get(':id')
-  getMessage(@Param('id') id: string) {
+  getMessage(@Param('id', ParseIntPipe) id: number) {
     // throw new BadRequestException('Invalid id');
     return this.appService.getMessage(id);
   }
 
-  @UsePipes(new ValidationPipe())
-  @Post('create')
-  createMessage(@Body() dto: MessageDto) {
-    return this.appService.createMessage(dto);
-  }
+  // @UsePipes(new ValidationPipe())
+  // @Post('create')
+  // createMessage(@Body() dto: MessageDto) {
+  //   return this.appService.createMessage(dto);
+  // }
 }
