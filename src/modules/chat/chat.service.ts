@@ -1,9 +1,8 @@
-import { DatabaseService } from '@/services/database.service';
-import { MessageDto } from '@/dto/message.dto';
+import { DatabaseService } from '@/modules/database/database.service';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class AppService {
+export class ChatService {
   constructor(private readonly databaseService: DatabaseService) {}
 
   getMessages(range: { skip: number; take?: number }) {
