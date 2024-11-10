@@ -13,6 +13,6 @@ async function bootstrap() {
     new FastifyAdapter(),
   );
   // app.setGlobalPrefix(app.get(ConfigService).get<string>('SERVER_BASE_PREFIX'));
-  await app.listen(env.PORT_BACKEND);
+  await app.listen(env.PORT_BACKEND, '0.0.0.0');
 }
 bootstrap();
