@@ -6,6 +6,8 @@ enum ChatType {
 
 enum MessageType {
   TEXT
+  // инфо: звонок, системное...
+
   // IMAGE
   // VIDEO
   // AUDIO
