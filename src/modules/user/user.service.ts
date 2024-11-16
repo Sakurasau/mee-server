@@ -1,23 +1,26 @@
-import { Injectable } from '@nestjs/common';
-
-export type User = any;
+import { Injectable } from '@nestjs/common'
+import { DatabaseService } from '../database/database.service'
+import { User } from '@prisma/client'
+import { CreateUserDto } from './user.dto'
 
 @Injectable()
 export class UserService {
-  private readonly users = [
-    {
-      userId: 1,
-      username: 'john',
-      password: 'changeme',
-    },
-    {
-      userId: 2,
-      username: 'maria',
-      password: 'guess',
-    },
-  ];
+  constructor(private readonly databaseService: DatabaseService) {}
 
-  async findOne(username: string): Promise<User | undefined> {
-    return this.users.find((user) => user.username === username);
+  // async findUserByEmail(email: string) {
+  //   const user = await this.databaseService.user.findFirst({
+  //     where: { email },
+  //   });
+
+  //   if (!user) return null;
+  //   return user;
+  // }
+
+  findUserByEmail(email: string): Promise<User | null> {
+    return this.databaseService.user.findFirst({ where: { email } }) ?? null
+  }
+
+  createUser(data: CreateUserDto) {
+    return this.databaseService.user.create({ data })
   }
 }

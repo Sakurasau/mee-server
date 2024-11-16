@@ -1,6 +1,6 @@
-import { Range } from '@/decorators/range.decorator';
-import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
-import { ChatService } from './chat.service';
+import { Range } from '@/decorators/range.decorator'
+import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common'
+import { ChatService } from './chat.service'
 
 @Controller('messages')
 export class ChatController {
@@ -8,13 +8,13 @@ export class ChatController {
 
   @Get()
   getMessages(@Range() range: { skip: number; take?: number }) {
-    return this.chatService.getMessages(range);
+    return this.chatService.getMessages(range)
   }
 
   @Get(':id')
   getMessage(@Param('id', ParseIntPipe) id: number) {
     // throw new BadRequestException('Invalid id');
-    return this.chatService.getMessage(id);
+    return this.chatService.getMessage(id)
   }
 
   // @UsePipes(new ValidationPipe())

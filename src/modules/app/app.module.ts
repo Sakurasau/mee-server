@@ -1,9 +1,9 @@
-import { Module } from '@nestjs/common';
-import { DatabaseModule } from '@/modules/database/database.module';
-import { ConfigModule } from '@nestjs/config';
-import { AuthModule } from '@/modules/auth/auth.module';
-import { ChatModule } from '@/modules/chat/chat.module';
-import { AuthGuard } from '../auth/auth.guard';
+import { Module } from '@nestjs/common'
+import { DatabaseModule } from '@/modules/database/database.module'
+import { ConfigModule } from '@nestjs/config'
+import { AuthModule } from '@/modules/auth/auth.module'
+import { ChatModule } from '@/modules/chat/chat.module'
+import { JwtAuthGuard } from '../auth/jwt-auth.guard'
 
 @Module({
   imports: [
@@ -15,7 +15,7 @@ import { AuthGuard } from '../auth/auth.guard';
   providers: [
     {
       provide: 'APP_GUARD',
-      useClass: AuthGuard,
+      useClass: JwtAuthGuard,
     },
   ],
 })
