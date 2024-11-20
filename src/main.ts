@@ -2,22 +2,17 @@ import { NestFactory } from '@nestjs/core'
 import { AppModule } from './modules/app/app.module'
 import { ConfigService } from '@nestjs/config'
 import { NestExpressApplication } from '@nestjs/platform-express'
+import * as cookieParser from 'cookie-parser'
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule)
 
-  // app.enableCors({
-  //   origin: [
-  //     'http://localhost:5173', // React Server
-  //     'http://localhost:4200', // Angular Server
-  //   ],
-  //   credentials: true,
-  // })
+  app.use(cookieParser())
 
-  // await app.enableCors({
-  //   origin: app.get(ConfigService).get('CORS_ORIGIN'),
-  //   credentials: true,
-  // })
+  app.enableCors({
+    origin: app.get(ConfigService).get('CORS_ORIGIN').split(' '),
+    credentials: true,
+  })
 
   // app.setGlobalPrefix(app.get(ConfigService).get<string>('SERVER_BASE_PREFIX'));
   await app.listen(
