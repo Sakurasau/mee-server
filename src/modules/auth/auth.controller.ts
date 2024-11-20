@@ -48,7 +48,7 @@ export class AuthController {
       res,
     )
     return res.redirect(
-      `${process.env.GOOGLE_REDIRECT_URL_CLIENT_REACT}?jwtUser=${encodedUser}`,
+      `${process.env.GOOGLE_REDIRECT_URL_CLIENT}?jwtUser=${encodedUser}`,
     )
   }
 }
