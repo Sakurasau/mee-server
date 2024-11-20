@@ -1,25 +1,50 @@
 import { Range } from '@/decorators/range.decorator'
-import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common'
 import { ChatService } from './chat.service'
+import { AddParticipantDto, CreateChatDto } from './chat.dto'
 
-@Controller('messages')
+@Controller('chat')
 export class ChatController {
   constructor(private readonly chatService: ChatService) {}
 
-  @Get()
-  getMessages(@Range() range: { skip: number; take?: number }) {
-    return this.chatService.getMessages(range)
+  @Post()
+  @UsePipes(new ValidationPipe())
+  async createChat(@Body() createChatDto: CreateChatDto) {
+    return this.chatService.createChat(createChatDto)
+  }
+
+  @Post(':id/participants')
+  @UsePipes(new ValidationPipe())
+  async addParticipant(
+    @Param('id') chatId: string,
+    @Body() addParticipantDto: AddParticipantDto,
+  ) {
+    return this.chatService.addParticipant(chatId, addParticipantDto.userId)
   }
 
   @Get(':id')
-  getMessage(@Param('id', ParseIntPipe) id: number) {
-    // throw new BadRequestException('Invalid id');
-    return this.chatService.getMessage(id)
+  async getChat(@Param('id') id: string) {
+    return this.chatService.getChatById(id)
   }
 
-  // @UsePipes(new ValidationPipe())
-  // @Post('create')
-  // createMessage(@Body() dto: MessageDto) {
-  //   return this.appService.createMessage(dto);
-  // }
+  @Get()
+  getChats(@Range() range: { skip: number; take?: number }) {
+    return this.chatService.getChats(range)
+  }
+
+  @Get(':userId/recommendations')
+  async getChatRecommendations(
+    @Param('userId') userId: string,
+    @Range() range: { skip: number; take?: number },
+  ) {
+    return this.chatService.getChatRecommendations(userId, range)
+  }
 }
