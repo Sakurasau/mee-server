@@ -1,6 +1,10 @@
 import { DatabaseService } from '@/modules/database/database.service'
 import { Injectable, NotFoundException } from '@nestjs/common'
-import { CreateChatDto, CreateDirectChatDto } from './chat.dto'
+import {
+  AddParticipantDto,
+  CreateChatDto,
+  CreateDirectChatDto,
+} from './chat.dto'
 
 @Injectable()
 export class ChatService {
@@ -8,15 +12,17 @@ export class ChatService {
 
   // ----------------- CREATE -----------------
 
-  async createChat(data: CreateChatDto) {
+  async createChat(data: CreateChatDto, creatorId: string) {
     return this.db.chat.create({
       data: {
         type: data.type,
         chat_name: data.chatName,
         participants: {
-          create: data.participantIds.map((userId) => ({
-            user: { connect: { id: userId } },
-          })),
+          create: Array.from(new Set([creatorId, ...data.participantIds])).map(
+            (userId) => ({
+              user: { connect: { id: userId } },
+            }),
+          ),
         },
       },
       include: { participants: true },
@@ -37,20 +43,20 @@ export class ChatService {
     })
   }
 
-  async addParticipant(chatId: string, userId: string) {
+  async addParticipant(data: AddParticipantDto) {
     return this.db.chatParticipant.create({
       data: {
-        chat: { connect: { id: chatId } },
-        user: { connect: { id: userId } },
+        chat: { connect: { id: data.chatId } },
+        user: { connect: { id: data.newUserId } },
       },
     })
   }
 
   // ------------------ READ ------------------
 
-  async getChatById(chatId: string) {
+  async getChatById(chatId: string, currentUserId: string) {
     const chat = await this.db.chat.findUnique({
-      where: { id: chatId },
+      where: { id: chatId, participants: { some: { user_id: currentUserId } } },
       include: { participants: true, messages: true },
     })
 
@@ -69,16 +75,25 @@ export class ChatService {
     })
   }
 
-  async getChats(range: { skip: number; take?: number }) {
-    return this.db.userProfile.findMany(range)
+  async getChats(
+    range: { skip: number; take?: number },
+    currentUserId: string,
+  ) {
+    return this.db.chat.findMany({
+      where: { participants: { some: { user_id: currentUserId } } },
+      ...range,
+    })
   }
 
   async getChatRecommendations(
-    userId: string,
+    currentUserId: string,
     range: { skip: number; take?: number },
   ) {
     const existingChats = await this.db.chat.findMany({
-      where: { participants: { some: { user_id: userId } }, type: 'DIRECT' },
+      where: {
+        participants: { some: { user_id: currentUserId } },
+        type: 'DIRECT',
+      },
       select: { participants: { select: { user_id: true } } },
     })
 
@@ -86,7 +101,7 @@ export class ChatService {
       existingChats.flatMap((chat) =>
         chat.participants.map((participant) => participant.user_id),
       ),
-    ).add(userId)
+    ).add(currentUserId)
 
     return this.db.user.findMany({
       where: {
@@ -95,5 +110,16 @@ export class ChatService {
       select: { id: true, email: true, first_name: true, last_name: true },
       ...range,
     })
+  }
+
+  // ------------------ Utils ------------------
+
+  async isUserParticipant(chatId: string, userId: string): Promise<boolean> {
+    const participant = await this.db.chatParticipant.findUnique({
+      where: {
+        chat_id_user_id: { chat_id: chatId, user_id: userId },
+      },
+    })
+    return !!participant
   }
 }

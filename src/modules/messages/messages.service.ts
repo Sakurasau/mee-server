@@ -1,5 +1,5 @@
 import { DatabaseService } from '@/modules/database/database.service'
-import { Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { ChatService } from '../chat/chat.service'
 import { CreateDirectMessageDto, CreateMessageDto } from './message.dto'
 
@@ -12,11 +12,11 @@ export class MessagesService {
 
   // ----------------- CREATE -----------------
 
-  async createMessageInChat(data: CreateMessageDto) {
+  async createMessageInChat(data: CreateMessageDto, currentUserId: string) {
     return this.db.message.create({
       data: {
         chat: { connect: { id: data.chatId } },
-        sender: data.senderId ? { connect: { id: data.senderId } } : undefined,
+        sender: currentUserId ? { connect: { id: currentUserId } } : undefined,
         content: data.content,
         message_type: 'TEXT',
         reply_to: data.replyId ? { connect: { id: data.replyId } } : undefined,
@@ -25,11 +25,14 @@ export class MessagesService {
     })
   }
 
-  async createMessageInDirect(data: CreateDirectMessageDto) {
+  async createMessageInDirect(
+    data: CreateDirectMessageDto,
+    currentUserId: string,
+  ) {
     let chatId: string
 
     const directChatData = {
-      userId1: data.senderId,
+      userId1: currentUserId,
       userId2: data.userId,
     }
 
@@ -44,7 +47,7 @@ export class MessagesService {
     return this.db.message.create({
       data: {
         chat: { connect: { id: chatId } },
-        sender: data.senderId ? { connect: { id: data.senderId } } : undefined,
+        sender: currentUserId ? { connect: { id: currentUserId } } : undefined,
         content: data.content,
         message_type: 'TEXT',
         reply_to: data.replyId ? { connect: { id: data.replyId } } : undefined,

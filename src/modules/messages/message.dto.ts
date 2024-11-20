@@ -9,10 +9,6 @@ export class CreateMessageDto {
 
   @IsNotEmpty()
   @IsString()
-  senderId: string;
-
-  @IsNotEmpty()
-  @IsString()
   content: string;
 
   @IsOptional()
@@ -28,10 +24,6 @@ export class CreateDirectMessageDto {
   @IsOptional()
   @IsString()
   userId: string;
-
-  @IsNotEmpty()
-  @IsString()
-  senderId: string;
 
   @IsNotEmpty()
   @IsString()

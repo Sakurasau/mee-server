@@ -21,19 +21,23 @@ export class CreateDirectChatDto {
 export class CreateChatDto {
   @IsOptional()
   @IsString()
-  chatName?: string;
+  chatName?: string
 
   @IsNotEmpty()
   @IsEnum(ChatType)
-  type: ChatType;
+  type: ChatType
 
   @IsArray()
   @IsNotEmpty({ each: true })
-  participantIds: string[];
+  participantIds: string[]
 }
 
 export class AddParticipantDto {
   @IsNotEmpty()
   @IsString()
-  userId: string;
+  chatId: string
+
+  @IsNotEmpty()
+  @IsString()
+  newUserId: string
 }
