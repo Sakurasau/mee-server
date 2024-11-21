@@ -35,6 +35,8 @@ model User {
 
 model UserProfile {
   user_id       String    @id
+  display_name  String?
+  username      String    @unique         // @nikita78
   updated_at    DateTime  @default(now()) @updatedAt
   bio           String?
   photos_urls   String[]
