@@ -2,7 +2,7 @@ import {
   BadRequestException,
   Injectable,
   Logger,
-  UnauthorizedException,
+  ConflictException,
 } from '@nestjs/common'
 import { UserService } from '../user/user.service'
 import { JwtService } from '@nestjs/jwt'
@@ -36,6 +36,8 @@ export class AuthService {
         last_name: googleUser.lastName,
         avatar_url: googleUser.picture,
       })
+
+    if (!user) throw new ConflictException('Failed to create user')
 
     const encodedUser = this.encodeUserDataAsJwt(user)
     this.setJwtTokenToCookies(res, user)

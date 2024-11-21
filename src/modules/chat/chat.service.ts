@@ -107,7 +107,7 @@ export class ChatService {
       where: {
         id: { notIn: Array.from(excludedUserIds) },
       },
-      select: { id: true, email: true, first_name: true, last_name: true },
+      select: { id: true, email: false, first_name: true, last_name: true, profile: true },
       ...range,
     })
   }
