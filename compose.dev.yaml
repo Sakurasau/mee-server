@@ -1,8 +1,6 @@
 x-common: &env
   env_file:
-    - ./.env
-  environment:
-    NODE_ENV: production
+    - ./.env.dev
 
 services:
   pgdb:
@@ -13,23 +11,6 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data/pgdata
     container_name: mee-postgres
-    <<: *env
-  
-  proxy:
-    image: nginx:latest
-    restart: always
-    ports:
-      - '80:80'
-      - '443:443'
-    volumes:
-      # - ./nginx.conf:/etc/nginx/nginx.conf
-      - ./nginx.template.conf:/etc/nginx/nginx.template.conf
-      - /etc/ssl/mee.social:/etc/ssl/mee.social
-    depends_on:
-      - backend
-      - client
-    container_name: mee-proxy
-    command: /bin/bash -c "envsubst < etc/nginx/nginx.template.conf > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"
     <<: *env
 
   backend:

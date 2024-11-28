@@ -51,8 +51,8 @@ ENV SERVER_BASE_PREFIX=${SERVER_BASE_PREFIX}
 ENV POSTGRES_CONNECTION_URL=${POSTGRES_CONNECTION_URL}
 
 # Run the build script.
-RUN pnpm run build
 RUN pnpm prisma generate
+RUN pnpm run build
 
 # ################################################################################
 # # Create a new stage to run the application with minimal runtime dependencies

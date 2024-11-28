@@ -1,0 +1,32 @@
+x-common: &env
+  env_file:
+    - ./.env.dev
+
+services:
+  pgdb:
+    image: postgres:latest
+    restart: on-failure
+    ports:
+      - ${PORT_POSTGRES}:${PORT_POSTGRES}
+    volumes:
+      - pgdata:/var/lib/postgresql/data/pgdata
+    container_name: mee-postgres
+    <<: *env
+
+  backend:
+    build:
+      context: .
+      args:
+        PORT_BACKEND: ${PORT_BACKEND}
+        SERVER_BASE_PREFIX: ${SERVER_BASE_PREFIX}
+        POSTGRES_CONNECTION_URL: ${POSTGRES_CONNECTION_URL}
+    restart: always
+    ports:
+      - ${PORT_BACKEND}
+    depends_on:
+      - pgdb
+    container_name: mee-backend
+    <<: *env
+
+volumes:
+  pgdata:
