@@ -27,7 +27,7 @@ async function bootstrap() {
 
   // app.setGlobalPrefix(app.get(ConfigService).get<string>('SERVER_BASE_PREFIX'));
   await app.listen(
-    Number(app.get(ConfigService).get('PORT_BACKEND')),
+    app.get(ConfigService).get<number>('PORT_BACKEND') || 3000,
     '0.0.0.0',
   )
 }
