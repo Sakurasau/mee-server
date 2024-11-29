@@ -41,14 +41,14 @@ RUN --mount=type=bind,source=package.json,target=package.json \
 # Copy the rest of the source files into the image.
 COPY . .
 
-# Adding environment variables
-ARG PORT_BACKEND
-ARG SERVER_BASE_PREFIX
-ARG POSTGRES_CONNECTION_URL
+# # Adding environment variables
+# ARG PORT_BACKEND
+# ARG SERVER_BASE_PREFIX
+# ARG POSTGRES_CONNECTION_URL
 
-ENV PORT_BACKEND=${PORT_BACKEND}
-ENV SERVER_BASE_PREFIX=${SERVER_BASE_PREFIX}
-ENV POSTGRES_CONNECTION_URL=${POSTGRES_CONNECTION_URL}
+# ENV PORT_BACKEND=${PORT_BACKEND}
+# ENV SERVER_BASE_PREFIX=${SERVER_BASE_PREFIX}
+# ENV POSTGRES_CONNECTION_URL=${POSTGRES_CONNECTION_URL}
 
 # Run the build script.
 RUN pnpm prisma generate

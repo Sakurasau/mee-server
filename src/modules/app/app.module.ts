@@ -15,7 +15,8 @@ const loadEnvFile = () => {
       : '.env.development'
 
   if (!fs.existsSync(filePath)) {
-    throw new Error(`❌ Environment file "${filePath}" not found`)
+    console.error(`❌ Environment file "${filePath}" not found`)
+    return undefined
   }
 
   console.log(`📚 Using environment file: ${filePath}`)
