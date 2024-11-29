@@ -1,6 +1,6 @@
 x-common: &env
   env_file:
-    - ./.env.dev
+    - ./.env.development
 
 services:
   pgdb:

@@ -1,6 +1,6 @@
 x-common: &env
   env_file:
-    - ./.env
+    - ./.env.production
   environment:
     NODE_ENV: production
 
