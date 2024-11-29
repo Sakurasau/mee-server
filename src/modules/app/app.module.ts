@@ -11,7 +11,7 @@ import { envSchema } from './env.schema'
 const loadEnvFile = () => {
   const filePath =
     process.env.NODE_ENV === 'production'
-      ? '.env.production'
+      ? '.env'
       : '.env.development'
 
   if (!fs.existsSync(filePath)) {
@@ -19,7 +19,7 @@ const loadEnvFile = () => {
   }
 
   console.log(`📚 Using environment file: ${filePath}`)
-  
+
   return filePath
 }
 
