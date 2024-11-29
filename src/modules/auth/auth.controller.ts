@@ -17,10 +17,14 @@ import { AuthGuard } from '@nestjs/passport'
 import { Public } from '@/decorators/public.decorator'
 import { GoogleOAuthGuard } from './google-auth.guard'
 import { Response } from 'express'
+import { ConfigService } from '@nestjs/config'
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private configService: ConfigService,
+  ) {}
 
   // @Public()
   // @HttpCode(HttpStatus.OK)
@@ -48,7 +52,7 @@ export class AuthController {
       res,
     )
     return res.redirect(
-      `${process.env.GOOGLE_REDIRECT_URL_CLIENT}?jwtUser=${encodedUser}`,
+      `${this.configService.get<string>('GOOGLE_REDIRECT_URL_CLIENT')}?jwtUser=${encodedUser}`,
     )
   }
 }
