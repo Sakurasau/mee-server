@@ -53,6 +53,8 @@ services:
       args:
         CLIENT_WEB_BASE_PREFIX: ${CLIENT_WEB_BASE_PREFIX}
         PORT_FRONTEND: ${PORT_FRONTEND}
+        VITE_URL_SERVER: ${VITE_URL_SERVER}
+        VITE_URL_SERVER_AUTH_GOOGLE: ${VITE_URL_SERVER_AUTH_GOOGLE}
     restart: always
     ports:
       - ${PORT_FRONTEND}
