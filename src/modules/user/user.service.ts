@@ -15,12 +15,18 @@ export class UserService {
   async createUser(data: CreateUserDto) {
     const user = await this.databaseService.user.create({ data })
 
-    const nanoid = customAlphabet('0123456789', 6)
+    const nanoid = (count: number = 6) => customAlphabet('0123456789', count)
+    const username = user.first_name
+      ?.trim()
+      .split(' ')[0]
+      .toLowerCase()
+      .replace(/[^a-zA-Z0-9]/g, '')
+      .slice(0, 10)
 
     await this.databaseService.userProfile.create({
       data: {
         user_id: user.id,
-        username: `${user.first_name ? user.first_name.toLowerCase() : 'user'}${nanoid()}`,
+        username: username ? `${username}${nanoid(6)}` : `user${nanoid(8)}`,
         display_name: user.first_name,
       },
     })
