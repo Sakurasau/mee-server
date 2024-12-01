@@ -22,7 +22,7 @@ services:
         POSTGRES_CONNECTION_URL: ${POSTGRES_CONNECTION_URL}
     restart: always
     ports:
-      - ${PORT_BACKEND}
+      - ${PORT_BACKEND}:${PORT_BACKEND}
     depends_on:
       - pgdb
     container_name: mee-backend
