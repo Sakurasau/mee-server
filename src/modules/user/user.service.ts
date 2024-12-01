@@ -15,7 +15,7 @@ export class UserService {
   async createUser(data: CreateUserDto) {
     const user = await this.databaseService.user.create({ data })
 
-    const nanoid = (count: number = 6) => customAlphabet('0123456789', count)
+    const nanoid = (count: number = 6) => customAlphabet('0123456789', count)()
     const username = user.first_name
       ?.trim()
       .split(' ')[0]
