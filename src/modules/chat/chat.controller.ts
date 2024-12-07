@@ -12,6 +12,13 @@ import {
 import { ChatService } from './chat.service'
 import { AddParticipantDto, CreateChatDto } from './chat.dto'
 import { CurrentUser } from '@/decorators/current-user.decorator'
+import { IUsersResponse } from '@/models/user.dto'
+import {
+  ChatResponseDto,
+  IChatResponse,
+  IChatsResponse,
+} from '@/models/chat.dto'
+import { ApiResponse } from '@nestjs/swagger'
 
 @Controller('chat')
 export class ChatController {
@@ -19,10 +26,15 @@ export class ChatController {
 
   @Post()
   @UsePipes(new ValidationPipe())
+  @ApiResponse({
+    status: 200,
+    description: 'Chat created',
+    type: ChatResponseDto,
+  })
   async createChat(
     @CurrentUser() currentUser: { id: string },
     @Body() createChatDto: CreateChatDto,
-  ) {
+  ): Promise<IChatResponse> {
     return this.chatService.createChat(createChatDto, currentUser.id)
   }
 
@@ -30,7 +42,7 @@ export class ChatController {
   getChats(
     @CurrentUser() currentUser: { id: string },
     @Range() range: { skip: number; take?: number },
-  ) {
+  ): Promise<IChatsResponse> {
     return this.chatService.getChats(range, currentUser.id)
   }
 
@@ -38,7 +50,7 @@ export class ChatController {
   async getChatRecommendations(
     @CurrentUser() currentUser: { id: string },
     @Range() range: { skip: number; take?: number },
-  ) {
+  ): Promise<IUsersResponse> {
     return this.chatService.getChatRecommendations(currentUser.id, range)
   }
 
