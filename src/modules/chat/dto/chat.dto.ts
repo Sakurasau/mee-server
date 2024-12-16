@@ -10,12 +10,7 @@ import {
 export class CreateDirectChatDto {
   @IsNotEmpty()
   @IsString()
-  userId1: string
-  // companionId: string
-
-  @IsNotEmpty()
-  @IsString()
-  userId2: string
+  userId: string
 }
 
 export class CreateChatDto {

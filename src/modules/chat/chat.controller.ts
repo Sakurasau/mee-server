@@ -9,17 +9,27 @@ import {
   ValidationPipe,
 } from '@nestjs/common'
 import { ChatService } from './chat.service'
-import { CreateChatDto } from './dto/chat.dto'
+import { CreateChatDto, CreateDirectChatDto } from './dto/chat.dto'
 import { CurrentUser } from '@/decorators/current-user.decorator'
-import { ApiOkResponse } from '@nestjs/swagger'
-import { ChatResponse } from './entities/chat.entity'
+import { ApiOkResponse, ApiQuery } from '@nestjs/swagger'
+import { ChatItemResponse, ChatResponse } from './entities/chat.entity'
 import { UserResponse } from '../user/entities/user.entity'
 
 @Controller('chat')
 export class ChatController {
   constructor(private readonly chatService: ChatService) {}
 
-  @Post()
+  @Post('create/direct')
+  @UsePipes(new ValidationPipe())
+  @ApiOkResponse({ type: ChatResponse })
+  async createDirectChat(
+    @CurrentUser() currentUser: { id: string },
+    @Body() createChatDto: CreateDirectChatDto,
+  ): Promise<ChatResponse> {
+    return this.chatService.createDirectChat(createChatDto, currentUser.id)
+  }
+
+  @Post('create')
   @UsePipes(new ValidationPipe())
   @ApiOkResponse({ type: ChatResponse })
   async createChat(
@@ -30,11 +40,13 @@ export class ChatController {
   }
 
   @Get()
-  @ApiOkResponse({ type: ChatResponse, isArray: true })
+  @ApiQuery({ name: 'page-number', required: false, type: Number, default: 1 })
+  @ApiQuery({ name: 'page-size', required: false, type: Number, default: 10 })
+  @ApiOkResponse({ type: ChatItemResponse, isArray: true })
   getChats(
     @CurrentUser() currentUser: { id: string },
     @Range() range: { skip: number; take?: number },
-  ): Promise<ChatResponse[]> {
+  ): Promise<ChatItemResponse[]> {
     return this.chatService.getChats(range, currentUser.id)
   }
 

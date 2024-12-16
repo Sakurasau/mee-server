@@ -5,6 +5,8 @@ import {
   CreateChatDto,
   CreateDirectChatDto,
 } from './dto/chat.dto'
+import { produce } from 'immer'
+import { Message } from '@prisma/client'
 
 @Injectable()
 export class ChatService {
@@ -29,14 +31,17 @@ export class ChatService {
     })
   }
 
-  async createDirectChat(data: CreateDirectChatDto) {
+  async createDirectChat(data: CreateDirectChatDto, creatorId: string) {
+    const findChat = await this.getDirectChat(creatorId, data.userId)
+    if (findChat) return findChat
+
     return this.db.chat.create({
       data: {
         type: 'DIRECT',
         participants: {
           create: [
-            { user: { connect: { id: data.userId1 } } },
-            { user: { connect: { id: data.userId2 } } },
+            { user: { connect: { id: creatorId } } },
+            { user: { connect: { id: data.userId } } },
           ],
         },
       },
@@ -64,12 +69,12 @@ export class ChatService {
     return chat
   }
 
-  async getDirectChat(data: CreateDirectChatDto) {
+  async getDirectChat(userId1: string, userId2: string) {
     return this.db.chat.findFirst({
       where: {
         type: 'DIRECT',
         participants: {
-          every: { user_id: { in: [data.userId1, data.userId2] } },
+          every: { user_id: { in: [userId1, userId2] } },
         },
       },
     })
@@ -79,10 +84,47 @@ export class ChatService {
     range: { skip: number; take?: number },
     currentUserId: string,
   ) {
-    return this.db.chat.findMany({
+    const data = await this.db.chat.findMany({
       where: { participants: { some: { user_id: currentUserId } } },
+      include: {
+        messages: { take: 1, orderBy: { created_at: 'desc' } },
+        participants: {
+          where: { user_id: { not: currentUserId } },
+          select: {
+            chat_id: false,
+            joined_at: true,
+            user_id: true,
+            user: {
+              select: {
+                id: true,
+                email: false,
+                first_name: true,
+                last_name: true,
+                profile: true,
+              },
+            },
+          },
+        },
+      },
       ...range,
     })
+
+    const draftData = data.map((chat) => ({
+      ...(({ messages, ...rest }) => rest)(chat),
+      last_message: chat.messages.length ? chat.messages[0] : null,
+    }))
+
+    console.log("draftData", draftData[0])
+
+    // const draftData = data.map(
+    //   (chat) =>
+    //     produce(chat, (draft) => {
+    //       draft['last_message'] = chat.messages[0] ?? null
+    //       // delete draft.messages
+    //     }) as (typeof data)[0] & { last_message: Message | null },
+    // )
+
+    return draftData
   }
 
   async getChatRecommendations(

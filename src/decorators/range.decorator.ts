@@ -9,8 +9,8 @@ export const Range = createParamDecorator(
       return { skip: 0, take: undefined }
     }
 
-    const pageNumber = parseInt(request.query.pageNumber) || 1
-    const pageSize = parseInt(request.query.pageSize) || 10
+    const pageNumber = parseInt(request.query['page-number']) || 1
+    const pageSize = parseInt(request.query['page-size']) || 10
 
     return {
       skip: (pageNumber - 1) * pageSize,

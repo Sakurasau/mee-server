@@ -36,10 +36,10 @@ export class MessagesService {
       userId2: data.userId,
     }
 
-    const directChat = await this.chat.getDirectChat(directChatData)
+    const directChat = await this.chat.getDirectChat(currentUserId, data.userId)
 
     if (!directChat) {
-      chatId = (await this.chat.createDirectChat(directChatData)).id
+      chatId = (await this.chat.createDirectChat({userId: data.userId}, currentUserId)).id
     } else {
       chatId = directChat.id
     }
