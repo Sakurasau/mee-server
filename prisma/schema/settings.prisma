@@ -1,6 +1,6 @@
 model UserSettings {
-  id      Int    @id @default(autoincrement())
-  user_id String @unique
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  user_id String @unique @db.ObjectId
 
   theme String
 

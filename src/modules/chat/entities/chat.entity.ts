@@ -25,6 +25,9 @@ export class ChatResponse implements Chat {
 
 export class ChatParticipantsForIncludeResponse implements Omit<ChatParticipant, 'chat_id'> {
   @ApiProperty()
+  id: string
+
+  @ApiProperty()
   user_id: string
 
   @ApiProperty()

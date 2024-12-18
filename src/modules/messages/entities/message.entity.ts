@@ -13,7 +13,7 @@ enum EMessageStatus {
 
 export class MessageResponse implements Message {
   @ApiProperty()
-  id: bigint
+  id: string
 
   @ApiProperty()
   chat_id: string
@@ -40,5 +40,5 @@ export class MessageResponse implements Message {
   is_deleted: boolean
 
   @ApiProperty()
-  reply_id: bigint | null
+  reply_id: string | null
 }

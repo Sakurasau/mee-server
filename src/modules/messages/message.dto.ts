@@ -13,7 +13,7 @@ export class CreateMessageDto {
 
   @IsOptional()
   @IsNumber()
-  replyId?: number;
+  replyId?: string;
 
   // @IsNotEmpty()
   // @IsEnum(MessageType)
@@ -31,7 +31,7 @@ export class CreateDirectMessageDto {
 
   @IsOptional()
   @IsNumber()
-  replyId?: number;
+  replyId?: string;
 
   // @IsNotEmpty()
   // @IsEnum(MessageType)

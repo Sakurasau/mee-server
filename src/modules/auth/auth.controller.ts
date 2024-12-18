@@ -51,6 +51,7 @@ export class AuthController {
       req.user,
       res,
     )
+
     return res.redirect(
       `${this.configService.get<string>('GOOGLE_REDIRECT_URL_CLIENT')}?jwtUser=${encodedUser}`,
     )

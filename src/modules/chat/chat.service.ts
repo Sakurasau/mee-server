@@ -91,6 +91,7 @@ export class ChatService {
         participants: {
           where: { user_id: { not: currentUserId } },
           select: {
+            id: true,
             chat_id: false,
             joined_at: true,
             user_id: true,
@@ -163,11 +164,12 @@ export class ChatService {
   // ------------------ Utils ------------------
 
   async isUserParticipant(chatId: string, userId: string): Promise<boolean> {
-    const participant = await this.db.chatParticipant.findUnique({
+    const participant = await this.db.chatParticipant.findMany({
       where: {
-        chat_id_user_id: { chat_id: chatId, user_id: userId },
+        chat_id: chatId,
+        user_id: userId,
       },
     })
-    return !!participant
+    return !!participant.length
   }
 }
