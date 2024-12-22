@@ -114,8 +114,6 @@ export class ChatService {
       last_message: chat.messages.length ? chat.messages[0] : null,
     }))
 
-    console.log("draftData", draftData[0])
-
     // const draftData = data.map(
     //   (chat) =>
     //     produce(chat, (draft) => {

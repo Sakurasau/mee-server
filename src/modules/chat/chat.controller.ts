@@ -51,6 +51,8 @@ export class ChatController {
   }
 
   @Get('recommendations')
+  @ApiQuery({ name: 'page-number', required: false, type: Number, default: 1 })
+  @ApiQuery({ name: 'page-size', required: false, type: Number, default: 10 })
   @ApiOkResponse({ type: UserResponse, isArray: true })
   async getChatRecommendations(
     @CurrentUser() currentUser: { id: string },
