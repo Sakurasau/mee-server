@@ -12,7 +12,7 @@ import { ChatService } from './chat.service'
 import { CreateChatDto, CreateDirectChatDto } from './dto/chat.dto'
 import { CurrentUser } from '@/decorators/current-user.decorator'
 import { ApiOkResponse, ApiQuery } from '@nestjs/swagger'
-import { ChatItemResponse, ChatResponse } from './entities/chat.entity'
+import { ChatInfoResponse, ChatItemResponse, ChatResponse } from './entities/chat.entity'
 import { UserResponse } from '../user/entities/user.entity'
 
 @Controller('chat')
@@ -81,11 +81,11 @@ export class ChatController {
   // }
 
   @Get(':id')
-  @ApiOkResponse({ type: ChatResponse })
+  @ApiOkResponse({ type: ChatInfoResponse })
   async getChat(
     @CurrentUser() currentUser: { id: string },
     @Param('id') id: string,
-  ): Promise<ChatResponse> {
+  ): Promise<ChatInfoResponse> {
     return this.chatService.getChatById(id, currentUser.id)
   }
 }

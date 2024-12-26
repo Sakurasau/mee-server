@@ -62,7 +62,25 @@ export class ChatService {
   async getChatById(chatId: string, currentUserId: string) {
     const chat = await this.db.chat.findUnique({
       where: { id: chatId, participants: { some: { user_id: currentUserId } } },
-      include: { participants: true, messages: true },
+      include: {
+        participants: {
+          where: { user_id: { not: currentUserId } },
+          select: {
+            chat_id: false,
+            joined_at: true,
+            user_id: true,
+            user: {
+              select: {
+                id: true,
+                email: false,
+                first_name: true,
+                last_name: true,
+                profile: true,
+              },
+            },
+          },
+        },
+      },
     })
 
     if (!chat) throw new NotFoundException('Chat not found')

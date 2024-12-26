@@ -54,3 +54,20 @@ export class ChatItemResponse implements Chat {
   participants: ChatParticipantsForIncludeResponse[]
 }
 
+
+export class ChatInfoResponse implements Chat {
+  @ApiProperty()
+  id: string
+
+  @ApiProperty({ enum: EChat })
+  type: $Enums.ChatType
+
+  @ApiProperty()
+  created_at: Date
+
+  @ApiProperty()
+  chat_name: string | null
+
+  @ApiProperty({description: "Participants without taking into account the current user"})
+  participants: ChatParticipantsForIncludeResponse[]
+}
